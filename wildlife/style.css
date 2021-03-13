@@ -1,0 +1,427 @@
+body {
+  margin: 0;
+  font-weight: 400;
+  font-family: 'Open Sans', sans-serif;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  float: left;  
+}
+
+a {
+  text-decoration: none;
+}
+
+/* container */
+
+.container{    
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* button */
+
+button {
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+}
+
+.button{
+display: flex;
+justify-content: left;
+padding-top: 4px;
+
+}
+
+.btn{
+display: inline-block;
+vertical-align: top;
+color: #F7F7F7;
+text-decoration: none;
+
+font-family: Roboto;
+font-style: normal;
+font-weight: normal;
+font-size: 23px;
+line-height: 27px;
+
+padding: 12px 24px;
+border-radius: 5px;
+border: none;
+cursor: pointer;
+border: 2px solid #CD6326;
+}
+
+.btn:hover {
+  background: #CD6326;
+  transition: background 0.2s linear;
+}
+
+.btn:active {
+  background: #8F5613;
+  border-color: #8F5613;
+}
+
+.btn--large {
+  padding: 14px 42px;
+  background: #CD6326;
+}
+
+.btn--large:hover {
+  background: #E39128;
+  border-color: #E39128;
+  transition: background 0.2s linear,  border-color 0.2s linear ;
+}
+
+.btn--large:active {
+  background: #8F5613;
+  border-color: #8F5613;
+}
+
+.btn--sub {
+  width: 120px;
+  height: 60px;
+  background: #CD6326;
+  border-radius: 0px 5px 5px 0px;
+  margin-left: -7px;
+}
+
+.btn--sub:hover {
+  background: #E39128;
+  border-color: #E39128;
+  transition: background 0.2s linear,  border-color 0.2s linear ;
+}
+
+.btn--sub:active {
+  background: #8F5613;
+  border-color: #8F5613;
+}
+
+/* head */
+
+.head {
+  background-image: url(assets/fox.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 780px;
+  background-color: #02160b;
+}
+
+/* header */
+
+.header__inner {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+}
+
+.logo__block {
+  display: flex;
+  flex-direction: row;
+}
+
+h1 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 32px;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: #F7F7F7;
+  margin: auto 15px;
+  
+}
+
+.search {
+  cursor: pointer;
+  margin: 18px 0px;
+}
+
+.search:hover {
+  transform: translateY(-5px);
+  transition: transform 0.2s
+}
+
+ul {
+  min-height: 100%;
+  margin: 0;
+}
+
+nav a {
+  display: inline-block;
+}
+
+nav {
+  margin-right: -30px;
+}
+
+.nav__li {
+  margin: auto 32px;
+  height: 60px;
+}
+
+.nav__link {
+  text-decoration: none;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 23px;
+  line-height: 60px;
+  color: #F7F7F7;
+}
+.nav__link:hover {
+  border-bottom: 3px solid #F7F7F7;
+}
+
+/* survival */
+
+.survival__items {
+  display: flex;
+  flex-direction: column;
+  
+}
+
+h2 {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 48px;
+  line-height: 72px;
+  color: #CD6326;
+  letter-spacing: 2px;
+  padding: 122px 0 50px 0;
+}
+
+.survival__text {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 27px;
+  color: #F7F7F7;
+  width: 274px;
+  margin-bottom: 48px;
+}
+
+/* latest__articles */
+
+.latest__articles {
+  background-color: #cccccc;
+}
+
+.latest__articles__title {
+  text-align: center;
+  padding: 120px 0 120px 0;
+}
+
+h3 {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 48px;
+  line-height: 72px; 
+  color: #333333;
+}
+
+h4 {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 36px;
+  color: #666666;
+  margin-top: 20px;
+  
+}
+
+.slider {
+  display: flex;
+  flex-direction: row;
+  height: 360px;
+  overflow: hidden;
+}
+
+.slider__arrow {
+  margin: auto 0;
+  width: 30px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.slider__block {
+  margin: 0 30px;
+  position: relative;
+  width: 300px;
+}
+
+.slider__img {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  z-index: 2;
+}
+
+.slider__block__content {
+  position: absolute;
+  z-index: 3;
+  margin: 0 auto;
+  padding-top: 250px;
+  min-width: 100%;
+}
+
+h5 {
+  text-align: center;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 22px;
+  line-height: 36px;
+  color: #F7F7F7;
+}
+
+.slider__decription {
+  text-align: center;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 17px;
+  line-height: 27px;
+  color: #F7F7F7;
+  margin-top: 10px;
+}
+
+.left {
+  margin-right: 30px;
+}
+
+.right {
+  margin-left: 30px;
+}
+
+
+/* get__notified */
+
+.get__notified {
+  background-color: #cccccc;
+}
+
+.get__notified__inner {
+  padding-top: 240px;
+  display: flex;
+  flex-direction: column;;
+}
+
+h6 {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 27px;
+  line-height: 40px;
+  color: #333333;
+  text-align: center;
+}
+
+.email {
+  height: 58px;
+  width: 540px;
+  background-color: #cccccc;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 23px;
+  line-height: 27px;
+  padding-left: 15px;
+  border: 1px solid #333333;
+  border-right: 0px;
+  margin-top: 1px;
+}
+form {
+  margin: 60px auto 241px auto;
+}
+
+/* footer */
+
+footer {
+  background-image: url(assets/leafs.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #181617;
+  height: 359px;
+}
+
+.footer__inner { 
+  display: flex;
+  flex-direction: row;
+  height: 359px;
+  
+}
+
+.footer__info {
+  margin: auto 0;
+}
+
+.footer__nav {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 23px;
+  line-height: 60px;
+  color: #F7F7F7;
+  margin-right: 85px;
+}
+
+.footer__nav:hover {
+  border-bottom: 3px solid #F7F7F7;
+}
+
+.socials {
+  margin: auto 0;
+}
+
+.link {
+  height: 40px;
+  width: 40px;
+  margin-left: 27px;
+}
+
+.fix {
+  padding-left: 3px;
+  margin-right: 58px;
+}
+
+.down {
+  margin-right: 84px;
+}
+
+.link:hover{
+  transform: translateY(-5px);
+  transition: transform 0.2s linear;
+}
+
+.facebook {
+  background-image: url(assets/icons/face.svg);  
+}
+
+.instagram {
+  background-image: url(assets/icons/insta.svg);
+}
+
+.pinterest {
+  background-image: url(assets/icons/pint.svg);
+}
+
+.telegram {
+  background-image: url(assets/icons/tele.svg);
+}
