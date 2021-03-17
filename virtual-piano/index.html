@@ -26,20 +26,20 @@
       <button class="btn btn-letters">Letters</button>
     </div>
     <div class="piano">
-      <div class="piano-key" data-letter="D" data-note="c"></div>
-      <div class="piano-key" data-letter="F" data-note="d"></div>
-      <div class="piano-key" data-letter="G" data-note="e"></div>
-      <div class="piano-key" data-letter="H" data-note="f"></div>
-      <div class="piano-key" data-letter="J" data-note="g"></div>
-      <div class="piano-key" data-letter="K" data-note="a"></div>
-      <div class="piano-key" data-letter="L" data-note="b"></div>
+      <div class="piano-key" data-key="KeyD" data-letter="D" data-note="c"></div>
+      <div class="piano-key" data-key="KeyF" data-letter="F" data-note="d"></div>
+      <div class="piano-key" data-key="KeyG" data-letter="G" data-note="e"></div>
+      <div class="piano-key" data-key="KeyH" data-letter="H" data-note="f"></div>
+      <div class="piano-key" data-key="KeyJ" data-letter="J" data-note="g"></div>
+      <div class="piano-key" data-key="KeyK" data-letter="K" data-note="a"></div>
+      <div class="piano-key" data-key="KeyL" data-letter="L" data-note="b"></div>
       <div class="keys-sharp">
-        <div class="piano-key sharp" data-letter="R" data-note="c♯"></div>
-        <div class="piano-key sharp" data-letter="T" data-note="d♯"></div>
+        <div class="piano-key sharp" data-key="KeyR" data-letter="R" data-note="c♯"></div>
+        <div class="piano-key sharp" data-key="KeyT" data-letter="T" data-note="d♯"></div>
         <div class="piano-key sharp none"></div>
-        <div class="piano-key sharp" data-letter="U" data-note="f♯"></div>
-        <div class="piano-key sharp" data-letter="I" data-note="g♯"></div>
-        <div class="piano-key sharp" data-letter="O" data-note="a♯"></div>
+        <div class="piano-key sharp" data-key="KeyU" data-letter="U" data-note="f♯"></div>
+        <div class="piano-key sharp" data-key="KeyI" data-letter="I" data-note="g♯"></div>
+        <div class="piano-key sharp" data-key="KeyO" data-letter="O" data-note="a♯"></div>
       </div>
     </div>
     <button class="fullscreen openfullscreen"></button>
@@ -52,7 +52,22 @@
       </a>
     </div>
   </footer>
-  <script src="script.js"></script>
+
+  <script src="script.js">
+  </script>
+  <audio data-key="KeyK" src="assets/audio/virtual-piano_assets_audio_a.mp3"></audio>
+  <audio data-key="KeyL" src="assets/audio/virtual-piano_assets_audio_b.mp3"></audio>
+  <audio data-key="KeyD" src="assets/audio/virtual-piano_assets_audio_c.mp3"></audio>
+  <audio data-key="KeyF" src="assets/audio/virtual-piano_assets_audio_d.mp3"></audio>
+  <audio data-key="KeyG" src="assets/audio/virtual-piano_assets_audio_e.mp3"></audio>
+  <audio data-key="KeyH" src="assets/audio/virtual-piano_assets_audio_f.mp3"></audio>
+  <audio data-key="KeyJ" src="assets/audio/virtual-piano_assets_audio_g.mp3"></audio>
+
+  <audio data-key="KeyO" src="assets/audio/virtual-piano_assets_audio_a♯.mp3"></audio>
+  <audio data-key="KeyR" src="assets/audio/virtual-piano_assets_audio_c♯.mp3"></audio>
+  <audio data-key="KeyT" src="assets/audio/virtual-piano_assets_audio_d♯.mp3"></audio>
+  <audio data-key="KeyU" src="assets/audio/virtual-piano_assets_audio_f♯.mp3"></audio>
+  <audio data-key="KeyI" src="assets/audio/virtual-piano_assets_audio_g♯.mp3"></audio>
 </body>
 
 </html>
