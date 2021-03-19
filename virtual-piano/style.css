@@ -4,6 +4,7 @@
 	box-sizing: border-box;
 	user-select: none;
 }
+
 a:focus {
 	outline: 0;
 }
@@ -97,6 +98,12 @@ body {
 .piano-key:hover {
 	background-color: #fff;
 }
+
+.piano-key:hover::before,
+.piano-key:hover::after {
+		opacity: 40%;
+}
+
 .keys-sharp {
 	position: absolute;
 	top: 0;
@@ -118,17 +125,11 @@ body {
 	pointer-events: auto;
 	transform-origin: center top;
 }
-.active{
+.piano-key.piano-key-active,
+.piano-key.sharp.piano-key-active {
 	transform: scale(0.96);
+	background-color: #000;
 }
-
-.active-pseudo:hover::after,
-.active-pseudo:hover::before,
-.active::after,
-.active::before {
-	color: #00b4a4;
-}
-
 .piano-key.none {
 	background-color: transparent;
 	border: 0;
@@ -153,10 +154,7 @@ body {
 	display: none;
 	content: attr(data-letter);
 }
-.piano-key:hover::before,
-.piano-key:hover::after {
-	color: #d7dfe6;
-}
+
 
 .sharp:active {
 	border-top: 0;
@@ -200,13 +198,13 @@ body {
 	background-size: contain;
 	transition: 0.3s;
 	cursor: pointer;
-	/* background-image: url("assets/svg/fullscreen-open.svg"); */
+	background-image: url("assets/svg/fullscreen-open.svg");
 }
 .fullscreen:hover {
 	background-color: rgba(255, 255, 255, 0.5);
 }
 :-webkit-full-screen .fullscreen {
-	/* background-image: url("assets/svg/fullscreen-exit.svg"); */
+	background-image: url("assets/svg/fullscreen-exit.svg");
 }
 .footer {
 	border-top: 1px solid;
@@ -227,7 +225,7 @@ body {
 	width: 120px;
 	height: 45px;
 	padding-left: 45px;
-	/* background-image: url("assets/svg/github.svg"); */
+	background-image: url("assets/svg/github.svg");
 	background-size: 35px;
 	background-repeat: no-repeat;
 	background-position: left center;
@@ -246,7 +244,7 @@ body {
 	font-family: "Open Sans", sans-serif;
 	width: 86px;
 	height: 32px;
-	/* background-image: url("assets/svg/rss.svg"); */
+	background-image: url("assets/svg/rss.svg");
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: left center;
@@ -267,6 +265,9 @@ body {
 	right: -5px;
 	letter-spacing: 0;
 }
+
+
+
 @media (max-width: 768px) {
 	.fullscreen {
 		top: 10px;
@@ -321,4 +322,6 @@ body {
 		width: 120px;
 		height: 40px;
 	}
+
 }
+
