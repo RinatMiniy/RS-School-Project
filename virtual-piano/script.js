@@ -57,7 +57,9 @@ function playAudio(audio) {
 }
 
 const startCorrespondOver = (event) => {
-  if (event.target.classList.contains("piano-key")) {
+  console.log(event)
+  console.log(event.target.classList.contains("piano-key::before"))
+  if (event.target.classList.contains("piano-key") && !event.target.classList.contains("piano-key::before")) {
     event.target.classList.add("piano-key-active");
     const key = event.target.dataset.key;
     audio = document.querySelector(`audio[data-key="${key}"]`);
@@ -78,7 +80,7 @@ const stopCorrespondOver = () => {
   });
 }
 
-document.addEventListener("mousedown", startCorrespondOver, false);
+piano.addEventListener("mousedown", startCorrespondOver, false);
 document.addEventListener("mouseup", stopCorrespondOver)
 
 // keyboard
@@ -102,21 +104,5 @@ window.addEventListener('keyup', function(event) {
   allowed = true;
 });
 
-// piano.addEventListener('click', (event) => {
-//   if(event.target.classList.contains('piano-key')) {
-//     const key = event.target.dataset.key;
-//     audio = document.querySelector(`audio[data-key="${key}"]`);
-//     event.target.classList.add('piano-key-active');
-//     event.target.classList.add('active::before');
-//     playAudio(audio);
-//   }   
-// });
-
-// const keys = Array.from(document.querySelectorAll('.piano-key'));
-//   keys.forEach(key => key.addEventListener('transitionend', removeTransition));
-
-// function removeTransition (event) {
-//   event.target.classList.remove("piano-key-active")
-// }
 
 
