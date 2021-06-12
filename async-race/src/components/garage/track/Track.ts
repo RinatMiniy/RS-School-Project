@@ -10,15 +10,16 @@ export class Track extends Builder {
   }
 
   Cars(el:HTMLElement) {
+    console.log(this);
     getCars(1, 100).then(
       // eslint-disable-next-line
-      function(result) {
-        result.items.forEach((elem:any) => {
-          el.innerHTML = renderCar(elem.id, elem.name, elem.color);
-        });
+      function(result:any) {
+        console.log(result);
+        // result.items.forEach((elem:any) => {
+        //   el.innerHTML = renderCar(elem.id, elem.name, elem.color);
+        // });
       },
       (error) => alert(error),
     );
-    console.log(this);
   }
 }

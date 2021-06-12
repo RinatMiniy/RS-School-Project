@@ -20,7 +20,6 @@ export class App {
     this.rootElement.appendChild(this.garage.el);
     this.winners = new Winners();
     this.location();
-    this.AddCar();
   }
 
   location() {
@@ -36,19 +35,5 @@ export class App {
         this.rootElement.appendChild(this.winners.el);
       }
     });
-  }
-
-  AddCar() {
-    const submit = document.getElementById('SubmitNewCar') as HTMLInputElement;
-    console.log(this, submit);
-
-    submit.onclick = function () {
-      const NameCar = (document.getElementById('NameCar') as HTMLInputElement).value;
-      const ColorCar = (document.getElementById('ColorCar') as HTMLInputElement).value;
-      createCar({
-        name: NameCar,
-        color: ColorCar,
-      });
-    };
   }
 }
