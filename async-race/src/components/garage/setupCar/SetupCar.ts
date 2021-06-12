@@ -12,6 +12,11 @@ export class SetupCar extends Builder {
       <input type = 'color' id="ColorCar" class="ColorCar">
       <button id="SubmitNewCar" class="SubmitNewCar"></button>
     </form>
+    <form>
+      <input type = 'text' id="NameCarUpdate" class="NameCarUpdate" disabled>
+      <input type = 'color' id="ColorCarUpdate" class="ColorCarUpdate" disabled>
+      <button id="SubmitNewCarUpdate" class="SubmitNewCarUpdate"></button disabled>
+    </form>
     `;
     this.NewCar = AddCarToTrack;
     this.AddCar();

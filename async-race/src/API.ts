@@ -11,8 +11,7 @@ export const createCar = async (el:any) => (
     headers: {
       'Content-Type': 'application/json',
     },
-  })
-).json();
+  })).json();
 
 export const getCars = async (page:number, limit = 7) => {
   const response = await fetch(`${garage}?_page=${page}&_limit=${limit}`);
@@ -22,6 +21,17 @@ export const getCars = async (page:number, limit = 7) => {
     count: response.headers.get('X-Total-Count'),
   };
 };
+
+export const DeleteCar = async (id:number) => (await fetch(`${garage}/${id}`, { method: 'DELETE' })).json();
+
+export const UpdateCar = async (id:number, el:any) => (
+  await fetch(`${garage}/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(el),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })).json();
 
 // console.log('createCar', createCar({
 //   name: 'string',
