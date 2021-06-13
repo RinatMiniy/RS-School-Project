@@ -1,5 +1,5 @@
 import { Builder } from '../../Builder';
-import { createCar } from '../../../API';
+import { createCar, UpdateCar, getCar } from '../../../API';
 
 export class SetupCar extends Builder {
   readonly NewCar: any;
@@ -15,7 +15,7 @@ export class SetupCar extends Builder {
     <form>
       <input type = 'text' id="NameCarUpdate" class="NameCarUpdate" disabled>
       <input type = 'color' id="ColorCarUpdate" class="ColorCarUpdate" disabled>
-      <button id="SubmitNewCarUpdate" class="SubmitNewCarUpdate"></button disabled>
+      <button id="SubmitNewCarUpdate" class="SubmitNewCarUpdate" disabled></button>
     </form>
     `;
     this.NewCar = AddCarToTrack;
@@ -33,9 +33,30 @@ export class SetupCar extends Builder {
         name: NameCar,
         color: ColorCar,
       }).then(
-        (result) => console.log(this.NewCar(result.id, result.name, result.color)),
+        (result) => this.NewCar(result.id, result.name, result.color),
         (error) => alert(error),
       );
     };
+  }
+
+  UpdateCars(id:number) {
+    (this.el.getElementsByClassName('NameCarUpdate')[0] as HTMLInputElement).disabled = false;
+    (this.el.getElementsByTagName('button')[1]).disabled = false;
+    (this.el.getElementsByClassName('ColorCarUpdate')[0] as HTMLInputElement).disabled = false;
+    const submit = this.el.getElementsByTagName('button')[1];
+    console.log(this);
+    submit.onclick = (e) => {
+      e.preventDefault();
+      const NameCar = (this.el.getElementsByClassName('NameCarUpdate')[0] as HTMLInputElement).value;
+      const ColorCar = (this.el.getElementsByClassName('ColorCarUpdate')[0] as HTMLInputElement).value;
+      UpdateCar(id, {
+        name: NameCar,
+        color: ColorCar,
+      });
+    };
+    return getCar(id).then(
+      (result) => console.log(result),
+      (error) => alert(error),
+    );
   }
 }

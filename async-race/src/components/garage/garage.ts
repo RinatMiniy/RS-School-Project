@@ -1,7 +1,7 @@
 import { Builder } from '../Builder';
 import { SetupCar } from './setupCar/SetupCar';
 import { Track } from './track/Track';
-import { DeleteCar } from '../../API';
+import { DeleteCar, UpdateCar, getCar } from '../../API';
 
 export class Garage extends Builder {
   private readonly setupCar: SetupCar;
@@ -30,7 +30,7 @@ export class Garage extends Builder {
           <button>Start</button>
           <button>Stop</button>
         </div>
-        <div class="car">
+        <div class="car" style = "background-color: ${color}; height: 20px; width: 20px;">
 
         </div>
       </div>
@@ -43,26 +43,24 @@ export class Garage extends Builder {
       const buttonsRemove = document.querySelectorAll('.btn__remove');
       const buttonsSelect = document.querySelectorAll('.btn__select');
       buttonsRemove.forEach((elem) => {
-        if (elem === event.target) this.DeleteCar(event.target);
+        if (elem === event.target) this.DeleteCars(event.target);
       });
       buttonsSelect.forEach((elem) => {
-        if (elem === event.target) this.UpdateCar(event.target);
+        if (elem === event.target) this.UpdateCars(event.target);
       });
     });
   }
 
-  DeleteCar(elem: any) {
+  DeleteCars(elem: any) {
     const deleteElem = document.getElementById(`${elem.dataset.id}`);
     console.log(deleteElem, this);
     DeleteCar(elem.dataset.id);
     deleteElem?.remove();
   }
 
-  UpdateCar(elem:any) {
+  UpdateCars(elem:any) {
     console.log(this);
     const updateElem = document.getElementById(`${elem.dataset.id}`);
-    (this.setupCar.el.querySelector('.NameCarUpdate') as HTMLInputElement).disabled = false;
-    (this.setupCar.el.querySelector('.ColorCarUpdate') as HTMLInputElement).disabled = false;
-    (this.setupCar.el.querySelector('.SubmitNewCarUpdate') as HTMLInputElement).disabled = false;
+    console.log('sasasa', this.setupCar.UpdateCars(elem.dataset.id));
   }
 }

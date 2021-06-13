@@ -33,6 +33,15 @@ export const UpdateCar = async (id:number, el:any) => (
     },
   })).json();
 
+export const startEngine = async (id:number) => (await fetch(`${engine}?id=${id}&status=started`)).json();
+
+export const stopEngine = async (id:number) => (await fetch(`${engine}?id=${id}&status=stopped`)).json();
+
+export const driveStatus = async (id:number) => {
+  const response = await fetch(`${engine}?id=${id}&status=drive`).catch();
+  return response.status !== 200 ? { success: false } : { ...(await response.json()) };
+}
+
 // console.log('createCar', createCar({
 //   name: 'string',
 //   color: 'string',
