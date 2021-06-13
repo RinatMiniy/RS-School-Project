@@ -1,10 +1,13 @@
 import { Builder } from '../../Builder';
-import { createCar, UpdateCar, getCar } from '../../../API';
+import { createCar, getCar, UpdateCar } from '../../../API';
+import { APIService } from '../../../Observer';
 
 export class SetupCar extends Builder {
   readonly NewCar: any;
 
-  constructor(AddCarToTrack:any) {
+  readonly observer: any;
+
+  constructor(AddCarToTrack:any, service:any) {
     super('div', 'SetupCar');
     this.el.innerHTML = `
     <form>
@@ -19,6 +22,7 @@ export class SetupCar extends Builder {
     </form>
     `;
     this.NewCar = AddCarToTrack;
+    this.observer = service;
     this.AddCar();
   }
 
@@ -27,15 +31,17 @@ export class SetupCar extends Builder {
     console.log(this, submit[0]);
     submit[0].onclick = (e) => {
       e.preventDefault();
-      const NameCar = (this.el.getElementsByClassName('NameCar')[0] as HTMLInputElement).value;
-      const ColorCar = (this.el.getElementsByClassName('ColorCar')[0] as HTMLInputElement).value;
+      const NameCar = (this.el.getElementsByClassName('NameCar')[0] as HTMLInputElement);
+      const ColorCar = (this.el.getElementsByClassName('ColorCar')[0] as HTMLInputElement);
       createCar({
-        name: NameCar,
-        color: ColorCar,
+        name: NameCar.value,
+        color: ColorCar.value,
       }).then(
         (result) => this.NewCar(result.id, result.name, result.color),
         (error) => alert(error),
       );
+      NameCar.value = '';
+      ColorCar.value = '#000000';
     };
   }
 
@@ -47,16 +53,17 @@ export class SetupCar extends Builder {
     console.log(this);
     submit.onclick = (e) => {
       e.preventDefault();
-      const NameCar = (this.el.getElementsByClassName('NameCarUpdate')[0] as HTMLInputElement).value;
-      const ColorCar = (this.el.getElementsByClassName('ColorCarUpdate')[0] as HTMLInputElement).value;
-      UpdateCar(id, {
-        name: NameCar,
-        color: ColorCar,
+      const NameCar = (this.el.getElementsByClassName('NameCarUpdate')[0] as HTMLInputElement);
+      const ColorCar = (this.el.getElementsByClassName('ColorCarUpdate')[0] as HTMLInputElement);
+      this.observer.UpdateCar(id, {
+        name: NameCar.value,
+        color: ColorCar.value,
       });
+      NameCar.value = '';
+      ColorCar.value = '#000000';
+      (this.el.getElementsByClassName('NameCarUpdate')[0] as HTMLInputElement).disabled = true;
+      (this.el.getElementsByTagName('button')[1]).disabled = true;
+      (this.el.getElementsByClassName('ColorCarUpdate')[0] as HTMLInputElement).disabled = true;
     };
-    return getCar(id).then(
-      (result) => console.log(result),
-      (error) => alert(error),
-    );
   }
 }

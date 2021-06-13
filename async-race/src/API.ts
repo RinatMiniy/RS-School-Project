@@ -40,7 +40,7 @@ export const stopEngine = async (id:number) => (await fetch(`${engine}?id=${id}&
 export const driveStatus = async (id:number) => {
   const response = await fetch(`${engine}?id=${id}&status=drive`).catch();
   return response.status !== 200 ? { success: false } : { ...(await response.json()) };
-}
+};
 
 // console.log('createCar', createCar({
 //   name: 'string',
