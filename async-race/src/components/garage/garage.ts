@@ -2,7 +2,7 @@ import { Builder } from '../Builder';
 import { SetupCar } from './setupCar/SetupCar';
 import { Track } from './track/Track';
 import {
-  DeleteCar, getCar, startEngine, stopEngine,
+  DeleteCar, getCar, startEngine, stopEngine, driveStatus, getCars, DeleteWinner,
 } from '../../API';
 import { APIService, Subscriber } from '../../Observer';
 
@@ -13,19 +13,18 @@ export class Garage extends Builder implements Subscriber {
 
   private readonly service: APIService;
 
-  constructor() {
+  constructor(createWinner:any) {
     super('div', 'garage');
     this.service = new APIService(this);
     this.setupCar = new SetupCar(this.AddCarToTrack, this.service);
     this.el.appendChild(this.setupCar.el);
     this.track = new Track(this.AddCarToTrack);
     this.el.appendChild(this.track.el);
-
     this.Listener();
   }
 
   AddCarToTrack = (id = 0, name:any, color = 0) => {
-    this.track.el.insertAdjacentHTML('beforebegin', `
+    this.track.el.insertAdjacentHTML('beforeend', `
     <div id = "${id}" class = "car__field">
       <div class="buttom__board">
         <button class="btn__select" data-id="${id}">Select</button>
@@ -38,7 +37,7 @@ export class Garage extends Builder implements Subscriber {
           <button class="btn__stop" data-id="${id}">Stop</button>
         </div>
         <div class="car">
-        <svg viewBox="0 0 512 512" style = "width: 80px; fill: ${color}; position: relative">
+        <svg data-stopanimete='' viewBox="0 0 512 512" style = "width: 80px; fill: ${color}; position: relative">
             <g>
               <path d="M505.453,264.607L494.577,252.6c-11.811-13.037-26.609-22.7-42.89-28.335H200.782c-8.185,0-15.228-6.29-15.614-14.466
                 c-0.411-8.729,6.545-15.936,15.184-15.936h43.834l-42.594-16.249l-46.847,1.378C99.341,180.622,45.594,198.263,0,229.784
@@ -53,6 +52,7 @@ export class Garage extends Builder implements Subscriber {
       </div>
     </div>
     `);
+    Garage.UpdateCountCars();
   };
 
   Listener() {
@@ -60,29 +60,53 @@ export class Garage extends Builder implements Subscriber {
       const buttonsRemove = document.querySelectorAll('.btn__remove');
       const buttonsSelect = document.querySelectorAll('.btn__select');
       const buttonsStart = document.querySelectorAll('.btn__start');
+      const buttonsStop = document.querySelectorAll('.btn__stop');
+      const buttonStartRace = document.querySelector('.StartRace');
+      const buttonGenerateCars = document.querySelector('.GenerateCars');
+      const buttonReset = document.querySelector('.ResetRace');
       buttonsRemove.forEach((elem) => {
-        if (elem === event.target) this.DeleteCars(event.target);
+        if (elem === event.target) Garage.DeleteCars(event.target);
       });
       buttonsSelect.forEach((elem) => {
         if (elem === event.target) this.setupCar.UpdateCars((event.target as any).dataset.id);
       });
       buttonsStart.forEach((elem) => {
-        if (elem === event.target) this.StartEngine(event.target);
+        if (elem === event.target) this.StartEngines(event.target);
       });
+      buttonsStop.forEach((elem) => {
+        if (elem === event.target) Garage.StopEngines(event.target);
+      });
+      if (buttonStartRace === event.target) {
+        buttonsStart.forEach((elem) => {
+          (elem as HTMLButtonElement).click();
+        });
+      }
+      if (buttonReset === event.target) {
+        buttonsStop.forEach((elem) => {
+          (elem as HTMLButtonElement).click();
+        });
+      }
+      if (buttonGenerateCars === event.target) this.setupCar.GenerateCars();
     });
   }
 
-  DeleteCars(elem: any) {
+  static DeleteCars(elem: any) {
     const deleteElem = document.getElementById(`${elem.dataset.id}`);
-    console.log(deleteElem, this);
+    DeleteWinner(elem.dataset.id);
     DeleteCar(elem.dataset.id);
     deleteElem?.remove();
+    Garage.UpdateCountCars();
   }
 
-  StartEngine(elem: any) {
+  StartEngines(elem: any) {
     console.log(this, elem.dataset.id);
     startEngine(elem.dataset.id).then(
-      (result) => this.animate({
+      (result) => {
+        driveStatus(elem.dataset.id).catch((error) => {
+          const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
+          car.dataset.stopanimete = 'stop';
+        });
+        this.animate({
         duration: result.distance / result.velocity,
         timing(timeFraction:any) {
           return timeFraction;
@@ -90,10 +114,14 @@ export class Garage extends Builder implements Subscriber {
         draw(progress: any) {
           const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
           const width = (document.querySelector('.car') as HTMLElement).offsetWidth - 80;
-          // eslint-disable-next-line
-          car.style.left = progress * width + 'px';
+          if (car.dataset.stopanimete !== 'stop') {
+            // eslint-disable-next-line
+            car.style.left = progress * width + 'px';
+          }
         },
-      }),
+        });
+        (document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any).dataset.stopanimete = '';
+    },
       (error) => alert(error),
     );
   }
@@ -110,6 +138,24 @@ export class Garage extends Builder implements Subscriber {
         requestAnimationFrame(animate);
       }
     });
+  }
+
+  static StopEngines(elem:any) {
+    stopEngine(elem.dataset.id).finally(() => {
+    const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
+    car.dataset.stopanimete = 'stop';
+    car.style.left = '0px';
+    });
+  }
+
+  static UpdateCountCars() {
+    getCars(1, 1000).then(
+      (result) => {
+        const counter = document.getElementsByTagName('h2')[0] as HTMLElement;
+        counter.innerHTML = `${result.items.length}`;
+      },
+      (error) => console.log(error),
+    );
   }
 
   notifyUpdateCar(id:number, el:any) {

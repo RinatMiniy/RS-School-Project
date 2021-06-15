@@ -13,7 +13,7 @@ export const createCar = async (el:any) => (
     },
   })).json();
 
-export const getCars = async (page:number, limit = 7) => {
+export const getCars = async (page:number, limit?:number) => {
   const response = await fetch(`${garage}?_page=${page}&_limit=${limit}`);
 
   return {
@@ -39,16 +39,13 @@ export const stopEngine = async (id:number) => (await fetch(`${engine}?id=${id}&
 
 export const driveStatus = async (id:number) => {
   const response = await fetch(`${engine}?id=${id}&status=drive`).catch();
-  return response.status !== 200 ? { success: false } : { ...(await response.json()) };
-};
 
-// console.log('createCar', createCar({
-//   name: 'string',
-//   color: 'string',
-// }).then(
-//     (result) => console.log(result),
-//     (error) => alert(error),
-// ));
+  if (response.status !== 200) {
+    throw new Error();
+  }
+
+  return { ...(await response.json()) };
+};
 
 export const getWinner = async (id:number) => (await fetch(`${winners}/${id}`)).json();
 
@@ -56,11 +53,29 @@ export const StatusWinner = async (id:number) => (await fetch(`${winners}/${id}`
 
 export const DeleteWinner = async (id:number) => (await fetch(`${winners}/${id}`, { method: 'DELETE' })).json();
 
-// export const getWinners = async ({page, limit = 10, sort, order}) => {
-//   const response = await fetch(`${winners}&_page${page}&_limit=${limit}${getSortOrder(sort, order)}`);
-//   const items = await response.json();
+const getSortOrder = (sort:string, order:string) => {
+  if (sort && order) return `&_sort=${sort}&_order=${order}`;
+  return '';
+};
 
-//   return {
-//     items: await Promise.all(items.map(async winners => ({...winners, car: await getCar(winner.id)})))
-//   }
-// }
+export const getWinners = async ({
+  page, limit = 10, sort, order,
+ }:any) => {
+  const response = await fetch(`${winners}?_page${page}&_limit=${limit}${getSortOrder(sort, order)}`);
+  const items = await response.json();
+
+  return {
+    items: await Promise.all(items.map(async (winner:any) => ({ ...winner, car: await getCar(winner.id) }))),
+  };
+};
+
+// createWinner({
+//   id: 3,
+//   wins: 3,
+//   time: 31,
+// });
+
+// getWinners({ page: 1 }).then(
+//   (r) => console.log('Winners', r),
+//   (e) => console.log(e),
+// );

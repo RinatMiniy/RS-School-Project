@@ -8,12 +8,17 @@ export class Track extends Builder {
   constructor(AddCarToTrack:any) {
     super('div', 'track');
     this.NewCar = AddCarToTrack;
+    this.el.innerHTML = `
+    <div>
+    <h2><h2>
+    </div>
+    `;
     this.DefaultCars();
   }
 
   DefaultCars() {
     console.log(this);
-    getCars(1, 100).then(
+    getCars(1, 7).then(
       (result) => {
         result.items.forEach((elem:any) => {
           this.NewCar(elem.id, elem.name, elem.color);
