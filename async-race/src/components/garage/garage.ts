@@ -128,86 +128,61 @@ export class Garage extends Builder implements Subscriber {
 
   StartRace() {
       const AllCarsOnTrack = document.querySelectorAll('.btn__start');
-      AllCarsOnTrack.forEach( async (elem:any) => {
-        const t = await startEngine(elem.dataset.id).then(
+      let winnerRace:any = null;
+      AllCarsOnTrack.forEach((elem:any) => {
+        startEngine(elem.dataset.id).then(
           (result) => {
-            let velocity = result.velocity
-            console.log('velocity', velocity)
+            const car:any = elem.dataset.id;
+            let stopAnime = false;
             driveStatus(elem.dataset.id).catch((error) => {
-              const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
-              car.dataset.stopanimete = 'stop';
+              stopAnime = true;
+              const carStop = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
+              carStop.dataset.stopanimete = 'stop';
             });
-            this.animate({
+            this.animate ({
             duration: result.distance / result.velocity,
             timing(timeFraction:any) {
               return timeFraction;
             },
             draw(progress: any) {
-              const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
+              const animateCar = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
               const width = (document.querySelector('.car') as HTMLElement).offsetWidth - 80;
-              if (car.dataset.stopanimete !== 'stop') {
+              if (animateCar.dataset.stopanimete !== 'stop') {
                 // eslint-disable-next-line
-                car.style.left = progress * width + 'px';
+                animateCar.style.left = progress * width + 'px';
               }
             },
+            YouAreWinner() {
+              if (winnerRace === null && !stopAnime) {
+                winnerRace = car;
+              //   this.createWinners({
+              //     "id": car,
+              //     "wins": 1,
+              //     "time": result.distance / result.velocity,
+              // })
+              }
+
+            },
+            stopAnime,
             });
             (document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any).dataset.stopanimete = '';
-            return velocity
         },
           (error) => alert(error),
         );
-        console.log('TTTT', t)
-      })
+      });
   }
 
-
-  // StartRace() {
-  //   const AllCarsOnTrack = document.querySelectorAll('.btn__start');
-  //   AllCarsOnTrack.forEach((elem:any) => {
-  //     const y = startEngine(elem.dataset.id).then(
-  //       async (result) => {
-  //         let velocity:number;
-  //         const t = await driveStatus(elem.dataset.id).then(
-  //           (r) => {
-  //             return velocity = result.velocity;
-  //           },
-  //           (e) => {
-  //             const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
-  //             car.dataset.stopanimete = 'stop';
-  //             return velocity = result.velocity;
-  //           }
-  //           );
-  //         this.animate({
-  //         duration: result.distance / result.velocity,
-  //         timing(timeFraction:any) {
-  //           return timeFraction;
-  //         },
-  //         draw(progress: any) {
-  //           const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
-  //           const width = (document.querySelector('.car') as HTMLElement).offsetWidth - 80;
-  //           if (car.dataset.stopanimete !== 'stop') {
-  //             // eslint-disable-next-line
-  //             car.style.left = progress * width + 'px';
-  //           }
-  //         },
-  //         });
-  //         setTimeout(() => {
-  //           result.velocity
-  //         }, result.distance / result.velocity);
-  //         (document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any).dataset.stopanimete = '';
-  //         return t;
-  //     },
-  //       (error) => alert(error),
-  //     );
-  //     console.log('yyyyyyyy', y);
-  //   });
-  // }
-
-  animate({ timing, draw, duration }:any) {
+  animate({
+    timing, draw, duration, YouAreWinner, stopAnime,
+   }:any) {
     const start = performance.now();
     requestAnimationFrame(function animate(time) {
       let timeFraction = (time - start) / duration;
-      if (timeFraction > 1) timeFraction = 1;
+      if (timeFraction > 1) {
+        timeFraction = 1;
+        YouAreWinner();
+      }
+      if (stopAnime) timeFraction = 1;
       const progress = timing(timeFraction);
       draw(progress);
       if (timeFraction < 1) {
@@ -228,10 +203,15 @@ export class Garage extends Builder implements Subscriber {
     getCars(1, 1000).then(
       (result) => {
         const counter = document.getElementsByTagName('h2')[0] as HTMLElement;
-        counter.innerHTML = `${result.items.length}`;
+        counter.innerHTML = `<span>Garage(${result.items.length})</span>`;
       },
       (error) => console.log(error),
     );
+  }
+
+  GeneretaPage() {
+    let cars = [];
+
   }
 
   notifyUpdateCar(id:number, el:any) {
