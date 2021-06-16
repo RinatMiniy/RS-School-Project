@@ -1,9 +1,9 @@
 import { Garage } from './components/garage/garage';
 import { Header } from './components/header/header';
 import { Winners } from './components/winners/winners';
-import { APIServiceForWinners, Subscriber } from './ObserverForWinners'
+import { APIServiceForWinners, SubscriberWin } from './ObserverForWinners';
 
-export class App implements Subscriber{
+export class App implements SubscriberWin {
   readonly rootElement: HTMLElement;
 
   private readonly header : Header;
@@ -16,12 +16,12 @@ export class App implements Subscriber{
 
   constructor(el: HTMLElement) {
     this.rootElement = el;
-    this.service = new APIServiceForWinners(this);
     this.header = new Header();
-    this.rootElement.appendChild(this.header.el);
-    this.garage = new Garage(this.service.createWinner);
-    this.rootElement.appendChild(this.garage.el);
     this.winners = new Winners();
+    this.service = new APIServiceForWinners(this);
+    this.rootElement.appendChild(this.header.el);
+    this.garage = new Garage(this.service);
+    this.rootElement.appendChild(this.garage.el);
     this.location();
   }
 
@@ -40,7 +40,7 @@ export class App implements Subscriber{
     });
   }
 
-  notifycreateWinner() {
-
+  notifycreateWinner(el:any) {
+    console.log('RABOTAET', this, el);
   }
 }

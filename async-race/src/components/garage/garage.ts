@@ -13,8 +13,11 @@ export class Garage extends Builder implements Subscriber {
 
   private readonly service: APIService;
 
+  private createWinners: any;
+
   constructor(createWinner:any) {
     super('div', 'garage');
+    this.createWinners = createWinner;
     this.service = new APIService(this);
     this.setupCar = new SetupCar(this.AddCarToTrack, this.service);
     this.el.appendChild(this.setupCar.el);
@@ -77,9 +80,7 @@ export class Garage extends Builder implements Subscriber {
         if (elem === event.target) Garage.StopEngines(event.target);
       });
       if (buttonStartRace === event.target) {
-        buttonsStart.forEach((elem) => {
-          (elem as HTMLButtonElement).click();
-        });
+        this.StartRace();
       }
       if (buttonReset === event.target) {
         buttonsStop.forEach((elem) => {
@@ -92,7 +93,6 @@ export class Garage extends Builder implements Subscriber {
 
   static DeleteCars(elem: any) {
     const deleteElem = document.getElementById(`${elem.dataset.id}`);
-    DeleteWinner(elem.dataset.id);
     DeleteCar(elem.dataset.id);
     deleteElem?.remove();
     Garage.UpdateCountCars();
@@ -126,8 +126,84 @@ export class Garage extends Builder implements Subscriber {
     );
   }
 
+  StartRace() {
+      const AllCarsOnTrack = document.querySelectorAll('.btn__start');
+      AllCarsOnTrack.forEach( async (elem:any) => {
+        const t = await startEngine(elem.dataset.id).then(
+          (result) => {
+            let velocity = result.velocity
+            console.log('velocity', velocity)
+            driveStatus(elem.dataset.id).catch((error) => {
+              const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
+              car.dataset.stopanimete = 'stop';
+            });
+            this.animate({
+            duration: result.distance / result.velocity,
+            timing(timeFraction:any) {
+              return timeFraction;
+            },
+            draw(progress: any) {
+              const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
+              const width = (document.querySelector('.car') as HTMLElement).offsetWidth - 80;
+              if (car.dataset.stopanimete !== 'stop') {
+                // eslint-disable-next-line
+                car.style.left = progress * width + 'px';
+              }
+            },
+            });
+            (document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any).dataset.stopanimete = '';
+            return velocity
+        },
+          (error) => alert(error),
+        );
+        console.log('TTTT', t)
+      })
+  }
+
+
+  // StartRace() {
+  //   const AllCarsOnTrack = document.querySelectorAll('.btn__start');
+  //   AllCarsOnTrack.forEach((elem:any) => {
+  //     const y = startEngine(elem.dataset.id).then(
+  //       async (result) => {
+  //         let velocity:number;
+  //         const t = await driveStatus(elem.dataset.id).then(
+  //           (r) => {
+  //             return velocity = result.velocity;
+  //           },
+  //           (e) => {
+  //             const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
+  //             car.dataset.stopanimete = 'stop';
+  //             return velocity = result.velocity;
+  //           }
+  //           );
+  //         this.animate({
+  //         duration: result.distance / result.velocity,
+  //         timing(timeFraction:any) {
+  //           return timeFraction;
+  //         },
+  //         draw(progress: any) {
+  //           const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
+  //           const width = (document.querySelector('.car') as HTMLElement).offsetWidth - 80;
+  //           if (car.dataset.stopanimete !== 'stop') {
+  //             // eslint-disable-next-line
+  //             car.style.left = progress * width + 'px';
+  //           }
+  //         },
+  //         });
+  //         setTimeout(() => {
+  //           result.velocity
+  //         }, result.distance / result.velocity);
+  //         (document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any).dataset.stopanimete = '';
+  //         return t;
+  //     },
+  //       (error) => alert(error),
+  //     );
+  //     console.log('yyyyyyyy', y);
+  //   });
+  // }
+
   animate({ timing, draw, duration }:any) {
-    console.log('totury', this);
     const start = performance.now();
     requestAnimationFrame(function animate(time) {
       let timeFraction = (time - start) / duration;
