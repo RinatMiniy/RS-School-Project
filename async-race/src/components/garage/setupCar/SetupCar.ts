@@ -1,5 +1,5 @@
 import { Builder } from '../../Builder';
-import { createCar, getCar, UpdateCar } from '../../../API';
+import { getCar, UpdateCar } from '../../../API';
 import { APIService } from '../../../Observer';
 
 export class SetupCar extends Builder {
@@ -38,12 +38,12 @@ export class SetupCar extends Builder {
       e.preventDefault();
       const NameCar = (this.el.getElementsByClassName('NameCar')[0] as HTMLInputElement);
       const ColorCar = (this.el.getElementsByClassName('ColorCar')[0] as HTMLInputElement);
-      createCar({
+      this.observer.createCar({
         name: NameCar.value,
         color: ColorCar.value,
       }).then(
-        (result) => this.NewCar(result.id, result.name, result.color),
-        (error) => alert(error),
+        (result:any) => this.NewCar(result.id, result.name, result.color),
+        (error:any) => alert(error),
       );
       NameCar.value = '';
       ColorCar.value = '#000000';
@@ -83,14 +83,14 @@ export class SetupCar extends Builder {
       const mark =  Math.floor(Math.random() * (MARK.length));
       const model = Math.floor(Math.random() * (MODEL.length));
       console.log(mark, model);
-      createCar({
+      this.observer.createCar({
         // eslint-disable-next-line
         name: (MARK[mark]) + ' ' + MODEL[model],
         // eslint-disable-next-line
         color: color,
       }).then(
-        (result) => this.NewCar(result.id, result.name, result.color),
-        (error) => alert(error),
+        (result:any) => this.NewCar(result.id, result.name, result.color),
+        (error:any) => alert(error),
       );
     }
   }

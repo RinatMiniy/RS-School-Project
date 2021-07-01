@@ -2,7 +2,7 @@ import { Builder } from '../Builder';
 import { SetupCar } from './setupCar/SetupCar';
 import { Track } from './track/Track';
 import {
-  DeleteCar, getCar, startEngine, stopEngine, driveStatus, getCars, DeleteWinner,
+  DeleteCar, getCar, startEngine, stopEngine, driveStatus, getCars,
 } from '../../API';
 import { APIService, Subscriber } from '../../Observer';
 
@@ -13,11 +13,11 @@ export class Garage extends Builder implements Subscriber {
 
   private readonly service: APIService;
 
-  private createWinners: any;
+  private obs: any;
 
   constructor(createWinner:any) {
     super('div', 'garage');
-    this.createWinners = createWinner;
+    this.obs = createWinner;
     this.service = new APIService(this);
     this.setupCar = new SetupCar(this.AddCarToTrack, this.service);
     this.el.appendChild(this.setupCar.el);
@@ -28,7 +28,7 @@ export class Garage extends Builder implements Subscriber {
 
   AddCarToTrack = (id = 0, name:any, color = 0) => {
     this.track.el.insertAdjacentHTML('beforeend', `
-    <div id = "${id}" class = "car__field">
+    <div id = "${id}" data-name = ${name} class = "car__field">
       <div class="buttom__board">
         <button class="btn__select" data-id="${id}">Select</button>
         <button class="btn__remove" data-id="${id}">Remove</button>
@@ -106,7 +106,7 @@ export class Garage extends Builder implements Subscriber {
           const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
           car.dataset.stopanimete = 'stop';
         });
-        this.animate({
+        Garage.animate({
         duration: result.distance / result.velocity,
         timing(timeFraction:any) {
           return timeFraction;
@@ -132,14 +132,15 @@ export class Garage extends Builder implements Subscriber {
       AllCarsOnTrack.forEach((elem:any) => {
         startEngine(elem.dataset.id).then(
           (result) => {
-            const car:any = elem.dataset.id;
+            const car:number = elem.dataset.id;
+            const nameCar:any = document.getElementById(`${car}`)?.dataset.name;
             let stopAnime = false;
             driveStatus(elem.dataset.id).catch((error) => {
               stopAnime = true;
               const carStop = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
               carStop.dataset.stopanimete = 'stop';
             });
-            this.animate ({
+            Garage.animate({
             duration: result.distance / result.velocity,
             timing(timeFraction:any) {
               return timeFraction;
@@ -152,16 +153,22 @@ export class Garage extends Builder implements Subscriber {
                 animateCar.style.left = progress * width + 'px';
               }
             },
-            YouAreWinner() {
+            YouAreWinner: () => {
               if (winnerRace === null && !stopAnime) {
                 winnerRace = car;
-              //   this.createWinners({
-              //     "id": car,
-              //     "wins": 1,
-              //     "time": result.distance / result.velocity,
-              // })
+                this.obs.saveWinner({
+                  id: Number(car),
+                  wins: 1,
+                  time: Number((result.distance / result.velocity / 1000).toFixed(2)),
+                });
+                // eslint-disable-next-line
+                this.el.insertAdjacentHTML('beforeend',  `
+                <span class = "winnerTable" style = "position: absolute; top: 50%; right: 30%; color: red;">Winner: ${nameCar}, Time: ${(result.distance / result.velocity / 1000).toFixed(2)}s</span>
+                `);
+                setTimeout(() => {
+                  (document.querySelector('.winnerTable') as HTMLElement).remove();
+                }, 6000);
               }
-
             },
             stopAnime,
             });
@@ -172,7 +179,7 @@ export class Garage extends Builder implements Subscriber {
       });
   }
 
-  animate({
+  static animate({
     timing, draw, duration, YouAreWinner, stopAnime,
    }:any) {
     const start = performance.now();
@@ -209,15 +216,18 @@ export class Garage extends Builder implements Subscriber {
     );
   }
 
-  GeneretaPage() {
-    let cars = [];
-
-  }
+  // GeneretaPage() {
+  //   let cars = [];
+  // }
 
   notifyUpdateCar(id:number, el:any) {
     console.log('Rab', id, el, this);
     const Updatingcar = document.getElementById(`${id}`);
     (Updatingcar?.getElementsByClassName('CarName')[0] as HTMLElement).innerHTML = `${el.name}`;
     (Updatingcar?.getElementsByTagName('svg')[0] as any).style.fill = `${el.color}`;
+  }
+
+  notifycreateCar(el:any) {
+    console.log('tototototo', this, el);
   }
 }

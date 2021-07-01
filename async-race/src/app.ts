@@ -22,6 +22,8 @@ export class App implements SubscriberWin {
     this.rootElement.appendChild(this.header.el);
     this.garage = new Garage(this.service);
     this.rootElement.appendChild(this.garage.el);
+    this.rootElement.appendChild(this.winners.el);
+    this.winners.el.style.display = 'none';
     this.location();
   }
 
@@ -29,18 +31,16 @@ export class App implements SubscriberWin {
     window.addEventListener('hashchange', () => {
       const hash = window.location.hash ? window.location.hash.slice(1) : '';
       if (hash === '/garage') {
-        this.rootElement.innerHTML = '';
-        this.rootElement.appendChild(this.header.el);
-        this.rootElement.appendChild(this.garage.el);
+        this.winners.el.style.display = 'none';
+        this.garage.el.style.display = 'block';
       } else {
-        this.rootElement.innerHTML = '';
-        this.rootElement.appendChild(this.header.el);
-        this.rootElement.appendChild(this.winners.el);
+        this.winners.el.style.display = 'block';
+        this.garage.el.style.display = 'none';
       }
     });
   }
 
   notifycreateWinner(el:any) {
-    console.log('RABOTAET', this, el);
+    this.winners.RenderTable();
   }
 }
