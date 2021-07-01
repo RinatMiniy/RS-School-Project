@@ -36,7 +36,6 @@ export class APIService {
         'Content-Type': 'application/json',
       },
     });
-    console.log(this);
     return res.json();
   }
 }

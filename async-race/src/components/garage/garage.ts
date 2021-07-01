@@ -106,7 +106,6 @@ export class Garage extends Builder implements Subscriber {
   }
 
   StartEngines(elem: HTMLElement) {
-    console.log(this, elem.dataset.id);
     startEngine(Number(elem.dataset.id)).then(
       (result) => {
         driveStatus(Number(elem.dataset.id)).catch((error) => {
@@ -239,7 +238,7 @@ export class Garage extends Builder implements Subscriber {
         const counter = document.getElementsByTagName('h2')[0] as HTMLElement;
         counter.innerHTML = `<span>Garage(${result.items.length})</span>`;
       },
-      (error) => console.log(error),
+      (error) => alert(error),
     );
   }
 
@@ -247,7 +246,6 @@ export class Garage extends Builder implements Subscriber {
     name:string,
     color:string
   }) {
-    console.log('Rab', id, el, this);
     const Updatingcar = document.getElementById(`${id}`);
     (Updatingcar?.getElementsByClassName('CarName')[0] as HTMLElement).innerHTML = `${el.name}`;
     (Updatingcar?.getElementsByTagName('svg')[0] as SVGSVGElement).style.fill = `${el.color}`;

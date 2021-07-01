@@ -22,19 +22,16 @@ export class APIServiceForWinners {
   }
 
   async getWinner(id:number) {
-    console.log(this);
     const res = await fetch(`${'http://127.0.0.1:3000/winners'}/${id}`);
     return res.json();
   }
 
   async StatusWinner(id:number) {
-    console.log(this);
     const res = await fetch(`${'http://127.0.0.1:3000/winners'}/${id}`);
     return res.status;
   }
 
   async DeleteWinner(id:number) {
-    console.log(this);
     const res = await fetch(`${'http://127.0.0.1:3000/winners'}/${id}`, { method: 'DELETE' });
     return res.json();
   }
@@ -52,12 +49,10 @@ export class APIServiceForWinners {
           'Content-Type': 'application/json',
         },
       })).json();
-    console.log(this);
   }
 
   async saveWinner({ id, wins, time }:{ id:number, wins:number, time: number }) {
     const winnerStatus = await this.StatusWinner(id);
-    console.log(this);
 
     if (winnerStatus === 404) {
       await this.createWinner({

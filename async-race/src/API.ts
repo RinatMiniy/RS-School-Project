@@ -38,11 +38,6 @@ export const driveStatus = async (id:number) => {
   return { ...(await response.json()) };
 };
 
-// const getSortOrder = (sort:string, order:string) => {
-//   if (sort && order) return `&_sort=${sort}&_order=${order}`;
-//   return '';
-// };
-
 export const getWinners = async (page:number) => {
   const response = await fetch(`${'http://127.0.0.1:3000/winners'}?_page${page}&_limit=${10}`);
   const items = await response.json();

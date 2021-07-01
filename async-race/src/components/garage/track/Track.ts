@@ -17,7 +17,6 @@ export class Track extends Builder {
   }
 
   DefaultCars() {
-    console.log(this);
     getCars(1, 7).then(
       (result) => {
         result.items.forEach((elem:{

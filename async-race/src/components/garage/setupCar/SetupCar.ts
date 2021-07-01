@@ -33,7 +33,6 @@ export class SetupCar extends Builder {
 
   AddCar() {
     const submit = this.el.getElementsByTagName('button');
-    console.log(this, submit[0]);
     submit[0].onclick = (e) => {
       e.preventDefault();
       const NameCar = (this.el.getElementsByClassName('NameCar')[0] as HTMLInputElement);
@@ -55,7 +54,6 @@ export class SetupCar extends Builder {
     (this.el.getElementsByTagName('button')[1]).disabled = false;
     (this.el.getElementsByClassName('ColorCarUpdate')[0] as HTMLInputElement).disabled = false;
     const submit = this.el.getElementsByTagName('button')[1];
-    console.log(this);
     submit.onclick = (e) => {
       e.preventDefault();
       const NameCar = (this.el.getElementsByClassName('NameCarUpdate')[0] as HTMLInputElement);
@@ -82,7 +80,6 @@ export class SetupCar extends Builder {
       // eslint-disable-next-line
       const mark =  Math.floor(Math.random() * (MARK.length));
       const model = Math.floor(Math.random() * (MODEL.length));
-      console.log(mark, model);
       this.observer.createCar({
         // eslint-disable-next-line
         name: (MARK[mark]) + ' ' + MODEL[model],

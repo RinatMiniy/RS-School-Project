@@ -27,7 +27,6 @@ export class Winners extends Builder {
     table.innerHTML = '';
     getWinners(1).then(
       (result) => {
-        console.log('winners', result);
         result.items.forEach((elem:{
           id:number,
           wins: number,
@@ -38,7 +37,6 @@ export class Winners extends Builder {
             id:number
           }
         }) => {
-          console.log('elem', elem);
           table.insertAdjacentHTML('beforebegin', `
           <tr>
               <th>${elem.id}</th>
