@@ -45,7 +45,7 @@ const getSortOrder = (sort:string, order:string) => {
 
 export const getWinners = async ({
   page, limit = 10, sort, order,
- }:any) => {
+}:any) => {
   const response = await fetch(`${'http://127.0.0.1:3000/winners'}?_page${page}&_limit=${limit}${getSortOrder(sort, order)}`);
   const items = await response.json();
 

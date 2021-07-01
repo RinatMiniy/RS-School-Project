@@ -107,40 +107,40 @@ export class Garage extends Builder implements Subscriber {
           car.dataset.stopanimete = 'stop';
         });
         Garage.animate({
-        duration: result.distance / result.velocity,
-        timing(timeFraction:any) {
-          return timeFraction;
-        },
-        draw(progress: any) {
-          const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
-          const width = (document.querySelector('.car') as HTMLElement).offsetWidth - 80;
-          if (car.dataset.stopanimete !== 'stop') {
+          duration: result.distance / result.velocity,
+          timing(timeFraction:any) {
+            return timeFraction;
+          },
+          draw(progress: any) {
+            const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
+            const width = (document.querySelector('.car') as HTMLElement).offsetWidth - 80;
+            if (car.dataset.stopanimete !== 'stop') {
             // eslint-disable-next-line
             car.style.left = progress * width + 'px';
-          }
-        },
+            }
+          },
         });
         (document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any).dataset.stopanimete = '';
-    },
+      },
       (error) => alert(error),
     );
   }
 
   StartRace() {
-      const AllCarsOnTrack = document.querySelectorAll('.btn__start');
-      let winnerRace:any = null;
-      AllCarsOnTrack.forEach((elem:any) => {
-        startEngine(elem.dataset.id).then(
-          (result) => {
-            const car:number = elem.dataset.id;
-            const nameCar:any = document.getElementById(`${car}`)?.dataset.name;
-            let stopAnime = false;
-            driveStatus(elem.dataset.id).catch((error) => {
-              stopAnime = true;
-              const carStop = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
-              carStop.dataset.stopanimete = 'stop';
-            });
-            Garage.animate({
+    const AllCarsOnTrack = document.querySelectorAll('.btn__start');
+    let winnerRace:any = null;
+    AllCarsOnTrack.forEach((elem:any) => {
+      startEngine(elem.dataset.id).then(
+        (result) => {
+          const car:number = elem.dataset.id;
+          const nameCar:any = document.getElementById(`${car}`)?.dataset.name;
+          let stopAnime = false;
+          driveStatus(elem.dataset.id).catch((error) => {
+            stopAnime = true;
+            const carStop = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
+            carStop.dataset.stopanimete = 'stop';
+          });
+          Garage.animate({
             duration: result.distance / result.velocity,
             timing(timeFraction:any) {
               return timeFraction;
@@ -171,17 +171,17 @@ export class Garage extends Builder implements Subscriber {
               }
             },
             stopAnime,
-            });
-            (document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any).dataset.stopanimete = '';
+          });
+          (document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any).dataset.stopanimete = '';
         },
-          (error) => alert(error),
-        );
-      });
+        (error) => alert(error),
+      );
+    });
   }
 
   static animate({
     timing, draw, duration, YouAreWinner, stopAnime,
-   }:any) {
+  }:any) {
     const start = performance.now();
     requestAnimationFrame(function animate(time) {
       let timeFraction = (time - start) / duration;
@@ -200,9 +200,9 @@ export class Garage extends Builder implements Subscriber {
 
   static StopEngines(elem:any) {
     stopEngine(elem.dataset.id).finally(() => {
-    const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
-    car.dataset.stopanimete = 'stop';
-    car.style.left = '0px';
+      const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
+      car.dataset.stopanimete = 'stop';
+      car.style.left = '0px';
     });
   }
 
