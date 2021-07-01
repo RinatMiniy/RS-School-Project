@@ -1,4 +1,4 @@
-export const renderCar = (id = 0, name:any, color = 0) => `
+export const renderCar = (id = 0, name:string, color = 0) => `
   <div class="buttom__board">
     <button>Select</button>
     <button>Remove</button>

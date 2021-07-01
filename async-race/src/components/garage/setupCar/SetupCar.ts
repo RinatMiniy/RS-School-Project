@@ -3,11 +3,11 @@ import { getCar, UpdateCar } from '../../../API';
 import { APIService } from '../../../Observer';
 
 export class SetupCar extends Builder {
-  readonly NewCar: any;
+  readonly NewCar: (id: number | undefined, name: string, color:number) => void;
 
-  readonly observer: any;
+  readonly observer: APIService;
 
-  constructor(AddCarToTrack:any, service:any) {
+  constructor(AddCarToTrack:(id: number | undefined, name: string, color:number) => void, service:APIService) {
     super('div', 'SetupCar');
     this.el.innerHTML = `
     <form>
@@ -42,8 +42,8 @@ export class SetupCar extends Builder {
         name: NameCar.value,
         color: ColorCar.value,
       }).then(
-        (result:any) => this.NewCar(result.id, result.name, result.color),
-        (error:any) => alert(error),
+        (result) => this.NewCar(result.id, result.name, result.color),
+        (error) => alert(error),
       );
       NameCar.value = '';
       ColorCar.value = '#000000';
@@ -89,8 +89,8 @@ export class SetupCar extends Builder {
         // eslint-disable-next-line
         color: color,
       }).then(
-        (result:any) => this.NewCar(result.id, result.name, result.color),
-        (error:any) => alert(error),
+        (result) => this.NewCar(result.id, result.name, result.color),
+        (error) => alert(error),
       );
     }
   }

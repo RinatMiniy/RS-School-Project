@@ -5,6 +5,7 @@ import {
   DeleteCar, getCar, startEngine, stopEngine, driveStatus, getCars,
 } from '../../API';
 import { APIService, Subscriber } from '../../Observer';
+import { APIServiceForWinners } from '../../ObserverForWinners';
 
 export class Garage extends Builder implements Subscriber {
   private readonly setupCar: SetupCar;
@@ -13,9 +14,9 @@ export class Garage extends Builder implements Subscriber {
 
   private readonly service: APIService;
 
-  private obs: any;
+  private obs: APIServiceForWinners;
 
-  constructor(createWinner:any) {
+  constructor(createWinner:APIServiceForWinners) {
     super('div', 'garage');
     this.obs = createWinner;
     this.service = new APIService(this);
@@ -26,7 +27,7 @@ export class Garage extends Builder implements Subscriber {
     this.Listener();
   }
 
-  AddCarToTrack = (id = 0, name:any, color = 0) => {
+  AddCarToTrack = (id = 0, name:string, color = 0) => {
     this.track.el.insertAdjacentHTML('beforeend', `
     <div id = "${id}" data-name = ${name} class = "car__field">
       <div class="buttom__board">
@@ -67,60 +68,71 @@ export class Garage extends Builder implements Subscriber {
       const buttonStartRace = document.querySelector('.StartRace');
       const buttonGenerateCars = document.querySelector('.GenerateCars');
       const buttonReset = document.querySelector('.ResetRace');
-      buttonsRemove.forEach((elem) => {
-        if (elem === event.target) Garage.DeleteCars(event.target);
-      });
-      buttonsSelect.forEach((elem) => {
-        if (elem === event.target) this.setupCar.UpdateCars((event.target as any).dataset.id);
-      });
-      buttonsStart.forEach((elem) => {
-        if (elem === event.target) this.StartEngines(event.target);
-      });
-      buttonsStop.forEach((elem) => {
-        if (elem === event.target) Garage.StopEngines(event.target);
-      });
-      if (buttonStartRace === event.target) {
-        this.StartRace();
-      }
-      if (buttonReset === event.target) {
-        buttonsStop.forEach((elem) => {
-          (elem as HTMLButtonElement).click();
+
+      if (event.target !== null) {
+        const events = event.target as HTMLElement;
+        buttonsRemove.forEach((elem) => {
+          if (elem === event.target) Garage.DeleteCars(events);
         });
+        buttonsSelect.forEach((elem) => {
+          if (elem === event.target) this.setupCar.UpdateCars(Number(events.dataset.id));
+        });
+        buttonsStart.forEach((elem) => {
+          if (elem === event.target) this.StartEngines(events);
+        });
+        buttonsStop.forEach((elem) => {
+          if (elem === event.target) Garage.StopEngines(events);
+        });
+        if (buttonStartRace === event.target) {
+          this.StartRace();
+        }
+        if (buttonReset === event.target) {
+          buttonsStop.forEach((elem) => {
+            (elem as HTMLButtonElement).click();
+          });
+        }
+        if (buttonGenerateCars === event.target) this.setupCar.GenerateCars();
       }
-      if (buttonGenerateCars === event.target) this.setupCar.GenerateCars();
     });
   }
 
-  static DeleteCars(elem: any) {
-    const deleteElem = document.getElementById(`${elem.dataset.id}`);
-    DeleteCar(elem.dataset.id);
-    deleteElem?.remove();
-    Garage.UpdateCountCars();
+  static DeleteCars(elem: HTMLElement | undefined) {
+    if (elem !== undefined) {
+      const deleteElem = document.getElementById(`${elem.dataset.id}`);
+      DeleteCar(Number(elem.dataset.id));
+      deleteElem?.remove();
+      Garage.UpdateCountCars();
+    }
   }
 
-  StartEngines(elem: any) {
+  StartEngines(elem: HTMLElement) {
     console.log(this, elem.dataset.id);
-    startEngine(elem.dataset.id).then(
+    startEngine(Number(elem.dataset.id)).then(
       (result) => {
-        driveStatus(elem.dataset.id).catch((error) => {
-          const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
-          car.dataset.stopanimete = 'stop';
+        driveStatus(Number(elem.dataset.id)).catch((error) => {
+          const car: SVGSVGElement | undefined = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0];
+
+          if (car !== undefined) {
+            car.dataset.stopanimete = 'stop';
+          }
         });
         Garage.animate({
-          duration: result.distance / result.velocity,
-          timing(timeFraction:any) {
+          timing(timeFraction:number) {
             return timeFraction;
           },
-          draw(progress: any) {
-            const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
+          draw(progress: number) {
+            const car: SVGSVGElement | undefined = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0];
             const width = (document.querySelector('.car') as HTMLElement).offsetWidth - 80;
-            if (car.dataset.stopanimete !== 'stop') {
+            if (car !== undefined && car.dataset.stopanimete !== 'stop') {
             // eslint-disable-next-line
             car.style.left = progress * width + 'px';
             }
           },
+          duration: result.distance / result.velocity,
+          YouAreWinner() {},
+          stopAnime: false,
         });
-        (document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any).dataset.stopanimete = '';
+        (document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as SVGSVGElement).dataset.stopanimete = '';
       },
       (error) => alert(error),
     );
@@ -128,33 +140,36 @@ export class Garage extends Builder implements Subscriber {
 
   StartRace() {
     const AllCarsOnTrack = document.querySelectorAll('.btn__start');
-    let winnerRace:any = null;
-    AllCarsOnTrack.forEach((elem:any) => {
-      startEngine(elem.dataset.id).then(
+    let winnerRace = 0;
+    AllCarsOnTrack.forEach((elem:Element) => {
+      startEngine(Number((elem as HTMLElement).dataset.id)).then(
         (result) => {
-          const car:number = elem.dataset.id;
-          const nameCar:any = document.getElementById(`${car}`)?.dataset.name;
+          const car = Number((elem as HTMLElement).dataset.id);
+          const nameCar = Number(document.getElementById(`${car}`)?.dataset.name);
           let stopAnime = false;
-          driveStatus(elem.dataset.id).catch((error) => {
+          driveStatus(Number((elem as HTMLElement).dataset.id)).catch((error) => {
             stopAnime = true;
-            const carStop = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
-            carStop.dataset.stopanimete = 'stop';
+            const carStop: SVGSVGElement | undefined = document.getElementById(`${Number((elem as HTMLElement).dataset.id)}`)?.getElementsByTagName('svg')[0];
+
+            if (carStop !== undefined) {
+              carStop.dataset.stopanimete = 'stop';
+            }
           });
           Garage.animate({
             duration: result.distance / result.velocity,
-            timing(timeFraction:any) {
+            timing(timeFraction:number) {
               return timeFraction;
             },
-            draw(progress: any) {
-              const animateCar = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
+            draw(progress: number) {
+              const animateCar: SVGSVGElement | undefined = document.getElementById(`${Number((elem as HTMLElement).dataset.id)}`)?.getElementsByTagName('svg')[0];
               const width = (document.querySelector('.car') as HTMLElement).offsetWidth - 80;
-              if (animateCar.dataset.stopanimete !== 'stop') {
+              if (animateCar !== undefined && animateCar.dataset.stopanimete !== 'stop') {
                 // eslint-disable-next-line
                 animateCar.style.left = progress * width + 'px';
               }
             },
             YouAreWinner: () => {
-              if (winnerRace === null && !stopAnime) {
+              if (winnerRace === 0 && !stopAnime) {
                 winnerRace = car;
                 this.obs.saveWinner({
                   id: Number(car),
@@ -172,7 +187,7 @@ export class Garage extends Builder implements Subscriber {
             },
             stopAnime,
           });
-          (document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any).dataset.stopanimete = '';
+          (document.getElementById(`${Number((elem as HTMLElement).dataset.id)}`)?.getElementsByTagName('svg')[0] as SVGSVGElement).dataset.stopanimete = '';
         },
         (error) => alert(error),
       );
@@ -180,8 +195,17 @@ export class Garage extends Builder implements Subscriber {
   }
 
   static animate({
-    timing, draw, duration, YouAreWinner, stopAnime,
-  }:any) {
+    timing, draw, duration, YouAreWinner = () => {}, stopAnime = false,
+  }:{
+    // eslint-disable-next-line
+    timing: Function,
+    // eslint-disable-next-line
+    draw: Function,
+    duration: number,
+    // eslint-disable-next-line
+    YouAreWinner: Function,
+    stopAnime: boolean,
+  }) {
     const start = performance.now();
     requestAnimationFrame(function animate(time) {
       let timeFraction = (time - start) / duration;
@@ -198,11 +222,14 @@ export class Garage extends Builder implements Subscriber {
     });
   }
 
-  static StopEngines(elem:any) {
-    stopEngine(elem.dataset.id).finally(() => {
-      const car = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0] as any;
-      car.dataset.stopanimete = 'stop';
-      car.style.left = '0px';
+  static StopEngines(elem: HTMLElement) {
+    stopEngine(Number(elem.dataset.id)).finally(() => {
+      const car: SVGSVGElement | undefined = document.getElementById(`${elem.dataset.id}`)?.getElementsByTagName('svg')[0];
+
+      if (car !== undefined) {
+        car.dataset.stopanimete = 'stop';
+        car.style.left = '0px';
+      }
     });
   }
 
@@ -216,18 +243,13 @@ export class Garage extends Builder implements Subscriber {
     );
   }
 
-  // GeneretaPage() {
-  //   let cars = [];
-  // }
-
-  notifyUpdateCar(id:number, el:any) {
+  notifyUpdateCar(id:number, el:{
+    name:string,
+    color:string
+  }) {
     console.log('Rab', id, el, this);
     const Updatingcar = document.getElementById(`${id}`);
     (Updatingcar?.getElementsByClassName('CarName')[0] as HTMLElement).innerHTML = `${el.name}`;
-    (Updatingcar?.getElementsByTagName('svg')[0] as any).style.fill = `${el.color}`;
-  }
-
-  notifycreateCar(el:any) {
-    console.log('tototototo', this, el);
+    (Updatingcar?.getElementsByTagName('svg')[0] as SVGSVGElement).style.fill = `${el.color}`;
   }
 }

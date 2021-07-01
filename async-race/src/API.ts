@@ -15,7 +15,7 @@ export const getCars = async (page:number, limit?:number) => {
 
 export const DeleteCar = async (id:number) => (await fetch(`${garage}/${id}`, { method: 'DELETE' })).json();
 
-export const UpdateCar = async (id:number, el:any) => (
+export const UpdateCar = async (id:number, el:string) => (
   await fetch(`${garage}/${id}`, {
     method: 'PUT',
     body: JSON.stringify(el),
@@ -38,18 +38,16 @@ export const driveStatus = async (id:number) => {
   return { ...(await response.json()) };
 };
 
-const getSortOrder = (sort:string, order:string) => {
-  if (sort && order) return `&_sort=${sort}&_order=${order}`;
-  return '';
-};
+// const getSortOrder = (sort:string, order:string) => {
+//   if (sort && order) return `&_sort=${sort}&_order=${order}`;
+//   return '';
+// };
 
-export const getWinners = async ({
-  page, limit = 10, sort, order,
-}:any) => {
-  const response = await fetch(`${'http://127.0.0.1:3000/winners'}?_page${page}&_limit=${limit}${getSortOrder(sort, order)}`);
+export const getWinners = async (page:number) => {
+  const response = await fetch(`${'http://127.0.0.1:3000/winners'}?_page${page}&_limit=${10}`);
   const items = await response.json();
 
   return {
-    items: await Promise.all(items.map(async (winner:any) => ({ ...winner, car: await getCar(winner.id) }))),
+    items: await response.json(),
   };
 };

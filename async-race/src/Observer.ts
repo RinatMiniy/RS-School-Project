@@ -1,10 +1,11 @@
 export interface Subscriber {
-  notifyUpdateCar(id:number, el:any): void;
-  notifycreateCar(el:any) : void;
+  notifyUpdateCar(id:number, el:{
+    name:string,
+    color:string
+  }): void;
 }
 
 interface Car {
-  id: number;
   name: string;
   color: string;
 }
@@ -12,7 +13,10 @@ interface Car {
 export class APIService {
   constructor(private readonly subscriber: Subscriber) {}
 
-  async UpdateCar(id:number, el:any) {
+  async UpdateCar(id:number, el:{
+    name:string,
+    color:string
+  }) {
     (await fetch(`${'http://127.0.0.1:3000/garage'}/${id}`,
       {
         method: 'PUT',
@@ -32,7 +36,7 @@ export class APIService {
         'Content-Type': 'application/json',
       },
     });
-    this.subscriber.notifycreateCar(newCar);
+    console.log(this);
     return res.json();
   }
 }

@@ -40,7 +40,7 @@ export class App implements SubscriberWin {
     });
   }
 
-  notifycreateWinner(el:any) {
+  notifycreateWinner() {
     this.winners.RenderTable();
   }
 }

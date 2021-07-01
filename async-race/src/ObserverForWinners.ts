@@ -1,5 +1,5 @@
 export interface SubscriberWin {
-  notifycreateWinner(el:any): void;
+  notifycreateWinner(): void;
 }
 
 export class APIServiceForWinners {
@@ -18,7 +18,7 @@ export class APIServiceForWinners {
           'Content-Type': 'application/json',
         },
       })).json();
-    this.subscriberWin.notifycreateWinner(el);
+    this.subscriberWin.notifycreateWinner();
   }
 
   async getWinner(id:number) {
@@ -39,7 +39,11 @@ export class APIServiceForWinners {
     return res.json();
   }
 
-  async updateWinner(id:number, el:any) {
+  async updateWinner(id:number, el:{
+    id:number,
+    wins:number,
+    time:number
+  }) {
     (
       await fetch(`${'http://127.0.0.1:3000/winners'}/${id}`, {
         method: 'PUT',
@@ -51,7 +55,7 @@ export class APIServiceForWinners {
     console.log(this);
   }
 
-  async saveWinner({ id, time }:{ id:number, time: number }) {
+  async saveWinner({ id, wins, time }:{ id:number, wins:number, time: number }) {
     const winnerStatus = await this.StatusWinner(id);
     console.log(this);
 

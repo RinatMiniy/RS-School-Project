@@ -25,10 +25,19 @@ export class Winners extends Builder {
   RenderTable() {
     const table = this.el.getElementsByTagName('tbody')[0];
     table.innerHTML = '';
-    getWinners({ page: 1 }).then(
+    getWinners(1).then(
       (result) => {
         console.log('winners', result);
-        result.items.forEach((elem:any) => {
+        result.items.forEach((elem:{
+          id:number,
+          wins: number,
+          time:number,
+          car: {
+            name:string,
+            color:string,
+            id:number
+          }
+        }) => {
           console.log('elem', elem);
           table.insertAdjacentHTML('beforebegin', `
           <tr>
