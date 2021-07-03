@@ -1,9 +1,9 @@
 import { Builder } from '../Builder';
 import { Card } from '../model/Card';
-import cards from '../model/cards'
+import cards from '../model/cards';
+import './mainPage.scss'
 
 export class MainPage extends Builder {
-
   constructor() {
     super('ul', 'main__page');
 
@@ -13,17 +13,23 @@ export class MainPage extends Builder {
 
   RenderMainPage() {
     for (let i = 0; i < cards[0].length; i++) {
-      let imgPath = cards[i+1][0] as {
+      const imgPath = cards[i + 1][0] as {
         image:string,
       };
-      let card = new Card(imgPath.image, cards[0][i] as string);
-      this.el.appendChild(card.el)
+      const card = new Card(imgPath.image, cards[0][i] as string);
+      this.el.appendChild(card.el);
     }
   }
 
   Listner() {
-    document.addEventListener('click', (elem) => {
-      console.log((elem.target as Element).parentNode);
-    })
+    this.el.addEventListener('click', (elem) => {
+      console.log((elem.target as HTMLElement).parentNode);
+
+      if (((elem.target as HTMLElement).parentNode as Element).classList.contains('card')) {
+        console.log(((elem.target as HTMLElement).parentNode as HTMLElement).dataset.type)
+        location.hash = `${((elem.target as HTMLElement).parentNode as HTMLElement).dataset.type}`
+        console.log(location.hash)
+      }
+    });
   }
 }
