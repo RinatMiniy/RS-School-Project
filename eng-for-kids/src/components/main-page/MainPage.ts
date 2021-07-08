@@ -1,14 +1,14 @@
 import { Builder } from '../Builder';
 import { Card } from '../model/Card';
 import cards from '../model/cards';
-import './mainPage.scss'
+import './mainPage.scss';
 
 export class MainPage extends Builder {
   constructor() {
     super('ul', 'main__page');
 
     this.RenderMainPage();
-    this.Listner();
+    this.Listener();
   }
 
   RenderMainPage() {
@@ -21,14 +21,14 @@ export class MainPage extends Builder {
     }
   }
 
-  Listner() {
+  Listener() {
     this.el.addEventListener('click', (elem) => {
       console.log((elem.target as HTMLElement).parentNode);
 
       if (((elem.target as HTMLElement).parentNode as Element).classList.contains('card')) {
-        console.log(((elem.target as HTMLElement).parentNode as HTMLElement).dataset.type)
-        location.hash = `${((elem.target as HTMLElement).parentNode as HTMLElement).dataset.type}`
-        console.log(location.hash)
+        console.log(((elem.target as HTMLElement).parentNode as HTMLElement).dataset.type);
+        // eslint-disable-next-line
+        location.hash = `${((elem.target as HTMLElement).parentNode as HTMLElement).dataset.type}`;
       }
     });
   }

@@ -22,6 +22,8 @@ export class Card extends Builder {
     const cardDescription = document.createElement('div');
     cardDescription.className = 'card__description__container';
     this.cardDescription = this.el.appendChild(cardDescription);
-    this.cardDescription.innerHTML = description;
+    this.cardDescription.innerHTML = `
+    <p>${description}</p>
+    `;
   }
 }

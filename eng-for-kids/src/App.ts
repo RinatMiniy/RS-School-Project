@@ -1,6 +1,6 @@
 import { Header } from './components/header/Header';
 import { MainPage } from './components/main-page/MainPage';
-import { Game } from './Game';
+import { Game } from './components/game/Game';
 
 export class App {
   private readonly rootElement: HTMLElement;
@@ -17,18 +17,15 @@ export class App {
     this.rootElement.appendChild(this.header.el);
     this.mainPage = new MainPage();
     this.rootElement.appendChild(this.mainPage.el);
-    this.location()
+    this.location();
   }
 
   location() {
     window.addEventListener('hashchange', () => {
       const hash = window.location.hash ? window.location.hash.slice(1).replace(/%20/gi, ' ') : '';
-      this.rootElement.removeChild(this.rootElement.lastChild as Node)
-      this.game = new Game(hash)
-      this.rootElement.appendChild(this.game.el)
-    })
+      this.rootElement.removeChild(this.rootElement.lastChild as Node);
+      this.game = new Game(hash);
+      this.rootElement.appendChild(this.game.el);
+    });
   }
-
 }
-
-

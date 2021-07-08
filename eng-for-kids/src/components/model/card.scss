@@ -9,7 +9,8 @@
   -webkit-box-shadow: 7px 7px 8px 0px rgba(40, 44, 45, 0.15);
   -moz-box-shadow: 7px 7px 8px 0px rgba(40, 44, 45, 0.15);
   box-shadow: 7px 7px 8px 0px rgba(40, 44, 45, 0.15);
-  background-color: #F9F1F0;
+  background-color: #FADCD9;
+  position: relative;
 }
 
 .card:hover {
@@ -31,4 +32,5 @@
   margin-top: -4px;
   padding-top: 22px;
   border-top: 5px solid #F79489;
+  background-color: #F9F1F0;
 }

@@ -11,7 +11,7 @@
   align-items: center;
   width: 80px;
   height: 80px;
-  background: red;
+  background: transparent;
   cursor: pointer;
 }
 
@@ -22,7 +22,7 @@
   z-index: 5;
   display: flex;
   flex-direction: column;
-  width: 25%;
+  width: 0%;
   min-width: 0;
   height: 100vh;
   margin: 0;
@@ -32,6 +32,41 @@
   overflow: hidden;
   overflow-y: auto;
   list-style: none;
-  background-color: #F8AFA6;
+  background-color: #F9F1F0;
   transition: 0.5s;
+}
+
+.nav__active {
+  width: 25%;
+}
+
+.nav__item {
+  white-space: nowrap;
+}
+
+.burger__btn__elem {
+  width: 50px;
+  height: 6px;
+  background: #F79489;
+  border-radius: 5px;
+}
+
+.burger__btn__elem::after {
+  transform: translateY(-16px);
+  content: "";
+  position: absolute;
+  width: 50px;
+  height: 6px;
+  background: #F79489;
+  border-radius: 5px;
+}
+
+.burger__btn__elem::before {
+  transform: translateY(16px);
+  content: "";
+  position: absolute;
+  width: 50px;
+  height: 6px;
+  background: #F79489;
+  border-radius: 5px;
 }

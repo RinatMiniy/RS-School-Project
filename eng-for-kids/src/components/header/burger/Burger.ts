@@ -1,12 +1,14 @@
-import { Builder } from "../../Builder";
-import './burger.scss'
+import { Builder } from '../../Builder';
+import './burger.scss';
 
 export class Burger extends Builder {
   constructor() {
-    super('div', 'burger')
+    super('div', 'burger');
 
     this.el.innerHTML = `
-    <div class = "burger__btn"></div>
+    <div class = "burger__btn">
+      <div class = "burger__btn__elem"></div>
+    </div>
     <ul class = "nav">
       <li class = "nav__item">Action (set A)</li>
       <li class = "nav__item">Action (set B)</li>
@@ -15,6 +17,6 @@ export class Burger extends Builder {
       <li class = "nav__item">Clothes</li>
       <li class = "nav__item">Emotions</li>
     </ul>
-    `
+    `;
   }
 }
