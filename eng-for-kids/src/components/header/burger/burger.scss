@@ -70,3 +70,10 @@
   background: #F79489;
   border-radius: 5px;
 }
+
+@media (max-width: 640px) {
+  .nav__active {
+    width: 50%;
+  }
+
+}

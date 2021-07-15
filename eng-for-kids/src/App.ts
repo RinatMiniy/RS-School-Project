@@ -7,7 +7,7 @@ export class App {
 
   private readonly header: Header;
 
-  private readonly mainPage: MainPage;
+  private mainPage: MainPage;
 
   private game: Game | undefined;
 
@@ -24,6 +24,10 @@ export class App {
     window.addEventListener('hashchange', () => {
       const hash = window.location.hash ? window.location.hash.slice(1).replace(/%20/gi, ' ') : '';
       this.rootElement.removeChild(this.rootElement.lastChild as Node);
+      // if (hash === '' || '/#') {
+      //   this.mainPage = new MainPage();
+      //   this.rootElement.appendChild(this.mainPage.el);
+      // }
       this.game = new Game(hash);
       this.rootElement.appendChild(this.game.el);
     });

@@ -10,7 +10,6 @@ export class Toggle extends Builder {
       <input type="checkbox" id="checkbox" class = "checkbox" />
       <div class="slider round"></div>
       </label>
-      <em>Enable Dark Mode!</em>
     </div>
     `;
   }
